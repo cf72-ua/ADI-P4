@@ -19,5 +19,16 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom'
+  },
+  optimizeDeps: {
+    include: ['@ionic/vue']
+  },
+  define: {
+    'process.env': {}
+  },
+  vue: {
+    compilerOptions: {
+      isCustomElement: tag => tag.startsWith('ion-')
+    }
   }
 })
