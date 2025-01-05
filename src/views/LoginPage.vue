@@ -16,7 +16,7 @@
               <ion-input
                 v-model="email"
                 type="email"
-                placeholder="email"
+                placeholder="Correo electrónico"
                 required
               ></ion-input>
             </ion-item>
@@ -24,7 +24,7 @@
               <ion-input
                 type="password"
                 v-model="password"
-                placeholder="password"
+                placeholder="Contraseña"
                 required
               ></ion-input>
             </ion-item>
@@ -46,20 +46,39 @@
 </template>
 
 <script setup>
-import { login, sendPasswordReset } from "../firebase/services/authService";
-import { alertController, toastController, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonInput, IonButton, IonCard, IonCardTitle, IonCardHeader, IonCardContent } from "@ionic/vue";
+import {
+  alertController,
+  toastController,
+  IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonItem,
+  IonInput,
+  IonButton,
+  IonCard,
+  IonCardTitle,
+  IonCardHeader,
+  IonCardContent,
+} from "@ionic/vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "@/store/authStore"; // Importa la store de autenticación
 
 const router = useRouter();
+const authStore = useAuthStore(); // Instancia de la store de Pinia
+
 const email = ref("");
 const password = ref("");
 
+// Maneja el inicio de sesión usando la store
 async function handleLogin() {
   try {
-    const user = await login(email.value, password.value);
-    console.log("Usuario logueado:", user);
+    await authStore.login(email.value, password.value); // Acción de la store
+    console.log("Usuario autenticado:", authStore.user);
 
+    // Redirección al home después del inicio de sesión
     router.push("/home");
   } catch (error) {
     console.error("Error al iniciar sesión:", error);
@@ -67,13 +86,14 @@ async function handleLogin() {
   }
 }
 
+// Maneja el restablecimiento de contraseña
 async function handlePasswordReset() {
   try {
     if (!email.value) {
       showError("Por favor, introduce tu correo electrónico.");
       return;
     }
-    await sendPasswordReset(email.value);
+    await authStore.resetPassword(email.value); // Usa la acción de la store
     showSuccess("Correo de restablecimiento enviado.");
   } catch (error) {
     console.error("Error al restablecer contraseña:", error);
@@ -81,6 +101,7 @@ async function handlePasswordReset() {
   }
 }
 
+// Muestra un mensaje de error
 async function showError(message) {
   const alert = await alertController.create({
     header: "Error",
@@ -90,6 +111,7 @@ async function showError(message) {
   await alert.present();
 }
 
+// Muestra un mensaje de éxito
 async function showSuccess(message) {
   const toast = await toastController.create({
     message,

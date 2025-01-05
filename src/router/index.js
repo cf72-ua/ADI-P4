@@ -8,7 +8,7 @@ import EditTheme from '../views/EditTheme.vue'
 const routes = [
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/login'
   },
   {
     path: '/home',
