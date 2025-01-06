@@ -7,7 +7,7 @@ import {
 } from '../firebase/services/authService';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-import { useIonRouter } from '@ionic/vue';
+import router from '../router';
 
 // Store de autenticación
 export const useAuthStore = defineStore('auth', {
@@ -45,38 +45,34 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // checkAuthState: Verifica el estado de autenticación
     checkAuthState() {
-      const auth = getAuth();
-      const ionRouter = useIonRouter(); // Manejo del router en Ionic
-
-      onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          this.user = user;
-          const uid = user.uid;
-
-          try {
-            const userDocRef = doc(db, 'users', uid);
-            const userDoc = await getDoc(userDocRef);
-
-            if (userDoc.exists()) {
-              const userData = userDoc.data();
-              this.isAdmin = userData.admin || false;
-            } else {
+        const auth = getAuth();
+  
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            this.user = user;
+            const uid = user.uid;
+  
+            try {
+              const userDocRef = doc(db, 'users', uid);
+              const userDoc = await getDoc(userDocRef);
+  
+              if (userDoc.exists()) {
+                const userData = userDoc.data();
+                this.isAdmin = userData.admin || false;
+              } else {
+                this.isAdmin = false;
+              }
+            } catch (error) {
+              console.error('Error al obtener información del usuario:', error);
               this.isAdmin = false;
             }
-          } catch (error) {
-            console.error('Error al obtener información del usuario:', error);
+          } else {
+            this.user = null;
             this.isAdmin = false;
+            router.push('/login'); // Redirige al login si no hay usuario autenticado
           }
-        } else {
-          this.user = null;
-          this.isAdmin = false;
-
-          // Redirección adaptada a Ionic
-          ionRouter.push('/login');
-        }
-      });
-    },
+        });
+      },
   },
 });

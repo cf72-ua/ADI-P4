@@ -2,13 +2,13 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Iniciar Sesión</ion-title>
+        <ion-title>Login</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
       <ion-card>
         <ion-card-header>
-          <ion-card-title>Bienvenido</ion-card-title>
+          <ion-card-title>Welcome</ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <form @submit.prevent="handleLogin">
@@ -16,7 +16,7 @@
               <ion-input
                 v-model="email"
                 type="email"
-                placeholder="Correo electrónico"
+                placeholder="Email"
                 required
               ></ion-input>
             </ion-item>
@@ -24,18 +24,18 @@
               <ion-input
                 type="password"
                 v-model="password"
-                placeholder="Contraseña"
+                placeholder="Password"
                 required
               ></ion-input>
             </ion-item>
             <div class="ion-text-center ion-margin-top">
-              <ion-button expand="block" type="submit">Iniciar Sesión</ion-button>
+              <ion-button expand="block" type="submit">Log in</ion-button>
               <ion-button
                 fill="clear"
                 color="medium"
                 @click="handlePasswordReset"
               >
-                ¿Olvidaste tu contraseña?
+                Forgot password?
               </ion-button>
             </div>
           </form>
@@ -76,13 +76,13 @@ const password = ref("");
 async function handleLogin() {
   try {
     await authStore.login(email.value, password.value); // Acción de la store
-    console.log("Usuario autenticado:", authStore.user);
+    console.log("Logged user:", authStore.user);
 
     // Redirección al home después del inicio de sesión
     router.push("/home");
   } catch (error) {
-    console.error("Error al iniciar sesión:", error);
-    showError("Error al iniciar sesión. Verifica tus credenciales.");
+    console.error("Failed to log in:", error);
+    showError("Failed to log in. Check the credentials.");
   }
 }
 
@@ -90,14 +90,14 @@ async function handleLogin() {
 async function handlePasswordReset() {
   try {
     if (!email.value) {
-      showError("Por favor, introduce tu correo electrónico.");
+      showError("Please, write your email.");
       return;
     }
     await authStore.resetPassword(email.value); // Usa la acción de la store
-    showSuccess("Correo de restablecimiento enviado.");
+    showSuccess("Reset password sent to email.");
   } catch (error) {
-    console.error("Error al restablecer contraseña:", error);
-    showError("No se pudo enviar el correo de restablecimiento.");
+    console.error("Failed to reset password:", error);
+    showError("Mail wasn't able to send.");
   }
 }
 

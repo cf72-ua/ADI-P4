@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
 import { createPinia } from 'pinia';
+import { useAuthStore } from './store/authStore';
 
 import { IonicVue } from '@ionic/vue';
 
@@ -40,6 +41,9 @@ const app = createApp(App)
   .use(IonicVue)
   .use(router)
   .use(pinia);
+
+const authStore = useAuthStore();
+authStore.checkAuthState();
 
 router.isReady().then(() => {
   app.mount('#app');
