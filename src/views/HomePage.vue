@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <!-- Menú lateral -->
-    <ion-menu content-id="main-content" v-if="isLoggedIn">
+    <ion-menu content-id="main-content" v-show="isLoggedIn">
       <ion-header>
         <ion-toolbar>
           <ion-title>Menu</ion-title>
@@ -12,7 +12,6 @@
           <!-- Botón Home -->
           <ion-item 
             @click="navigateTo('/home')" 
-            :class="{'active-item': isActiveRoute('/home')}"
             class="menu-item"
           >
             <ion-icon slot="start" name="home-outline"></ion-icon>
@@ -40,7 +39,7 @@
       <ion-header :translucent="true">
         <ion-toolbar>
           <!-- Botón de menú visible solo si el usuario está logueado -->
-          <ion-buttons slot="start" v-if="isLoggedIn">
+          <ion-buttons slot="start" >
             <ion-menu-button auto-hide="false"></ion-menu-button>
           </ion-buttons>
           <ion-title>Nodality</ion-title>
@@ -92,6 +91,16 @@ import {
 import { computed } from "vue";
 import { useAuthStore } from "@/store/authStore"; // Importa la store de autenticación
 import { useRouter, useRoute } from "vue-router"; // Manejo de rutas en Vue Router
+
+import { addIcons } from 'ionicons';
+import { homeOutline, brushOutline, layersOutline, informationCircleOutline } from 'ionicons/icons';
+
+addIcons({
+  homeOutline,
+  brushOutline,
+  layersOutline,
+  informationCircleOutline
+});
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -201,4 +210,5 @@ function isActiveRoute(path) {
     color: #2c3e50;
   }
 }
+
 </style>

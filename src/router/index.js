@@ -4,6 +4,7 @@ import LoginPage from '../views/LoginPage.vue'
 import ListThemes from '../views/ListThemes.vue'
 import CreateTheme from '../views/CreateTheme.vue'
 import EditTheme from '../views/EditTheme.vue'
+import ListNodes from '../views/ListNodes.vue'
 
 const routes = [
   {
@@ -35,6 +36,11 @@ const routes = [
     path: '/listThemes/:id/edit',
     name: 'EditTheme',
     component: EditTheme
+  },
+  {
+    path: '/nodes',
+    name: 'Nodes',
+    component: ListNodes
   }
 ]
 
