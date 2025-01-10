@@ -51,6 +51,7 @@
           <p><strong>Created At:</strong> {{ selectedNode.createdAt || "Unknown" }}</p>
           <p><strong>Created By:</strong> {{ selectedNode.createdBy || "Unknown" }}</p>
           <p><strong>Theme:</strong> {{ selectedNode.themeId || "Unknown" }}</p>
+          <p><strong>Content:</strong> {{ selectedNode.content || "No content" }}</p>
           <ion-button fill="clear" @click="closeDetails" class="green-button">Close</ion-button>
         </div>
       </div>

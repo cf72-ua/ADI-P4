@@ -14,16 +14,16 @@
           <form @submit.prevent="createNode">
             <ion-item>
               <ion-input
-                  v-model="title"
-                  placeholder="Node Title"
-                  required
+                v-model="title"
+                placeholder="Node Title"
+                required
               ></ion-input>
             </ion-item>
             <ion-item>
               <ion-input
-                  v-model="content"
-                  placeholder="Content"
-                  required
+                v-model="content"
+                placeholder="Content"
+                required
               ></ion-input>
             </ion-item>
 
@@ -40,6 +40,7 @@
                 </ion-select-option>
               </ion-select>
             </ion-item>
+            <div v-if="errors.createdBy" class="error-message">{{ errors.createdBy }}</div>
 
             <!-- Lista de temas disponibles para 'Theme' -->
             <ion-item>
@@ -54,6 +55,7 @@
                 </ion-select-option>
               </ion-select>
             </ion-item>
+            <div v-if="errors.themeId" class="error-message">{{ errors.themeId }}</div>
 
             <div class="ion-margin-top ion-text-center">
               <ion-button expand="block" type="submit" class="green-button-fill">Create</ion-button>
@@ -101,6 +103,7 @@ const themeId = ref("");
 
 const users = ref([]); // Lista de usuarios disponibles
 const themes = ref([]); // Lista de temas disponibles
+const errors = ref({ createdBy: "", themeId: "" }); // Objeto para los errores
 
 // Cargar la lista de usuarios y temas cuando el componente se monta
 onMounted(async () => {
@@ -114,6 +117,23 @@ onMounted(async () => {
 
 // Crear un nuevo nodo
 async function createNode() {
+  // Resetear errores
+  errors.value = { createdBy: "", themeId: "" };
+
+  // Validar si se seleccionaron un usuario y un tema
+  if (!createdBy.value) {
+    errors.value.createdBy = "Please select a user.";
+  }
+
+  if (!themeId.value) {
+    errors.value.themeId = "Please select a theme.";
+  }
+
+  // Si hay errores, no proceder con la creación del nodo
+  if (errors.value.createdBy || errors.value.themeId) {
+    return;
+  }
+
   const createdAt = new Date(); // Usar la fecha actual
   const newNode = {
     title: title.value,
@@ -160,4 +180,9 @@ async function fetchNodes() {
   color: #2e7d32;
 }
 
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
 </style>

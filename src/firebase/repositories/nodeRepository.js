@@ -111,13 +111,17 @@ export const saveNode = async (node) => {
         if (node.id) {
           nodeDocRef = doc(db, 'Nodes', node.id);
     
-          const createdByRef = node.createdBy && node.createdBy.id ? doc(db, 'users', node.createdBy.id) : null;
-          const themeIdRef = node.themeId && node.themeId.id ? doc(db, 'Themes', node.themeId.id) : null;
+          // Obtener el nodo actual para mantener los valores originales si no se proporcionan
+          const currentNodeSnapshot = await getDoc(nodeDocRef);
+          const currentNode = currentNodeSnapshot.data();
+
+          // Verificamos si 'createdBy' y 'themeId' están definidos, si no, mantenemos los originales
+          const createdByRef = node.createdBy && node.createdBy.id ? doc(db, 'users', node.createdBy.id) : (currentNode.createdBy ? doc(db, 'users', currentNode.createdBy.id) : null);
+          const themeIdRef = node.themeId && node.themeId.id ? doc(db, 'Themes', node.themeId.id) : (currentNode.themeId ? doc(db, 'Themes', currentNode.themeId.id) : null);
     
           await updateDoc(nodeDocRef, {
             title: node.title,
             content: node.content,
-            createdAt: node.createdAt,
             createdBy: createdByRef,
             themeId: themeIdRef,
           });
