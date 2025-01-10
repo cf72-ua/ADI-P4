@@ -1,7 +1,6 @@
-import { getFirestore, collection, doc, getDoc, getDocs, updateDoc, setDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, updateDoc, addDoc } from 'firebase/firestore';
+import { db } from "../config/firebaseConfig";
 
-// Inicializa la conexión a Firestore
-const db = getFirestore();
 const nodesCollection = collection(db, 'Nodes');
 
 /**
@@ -58,7 +57,7 @@ export const getAllNodes = async () => {
  * @param {string} id - ID del nodo a obtener
  * @returns {Promise<Object>} Nodo procesado
  */
-export const getNodeById = async (id) => {
+export const getNodeById = async (node) => {
   try {
     const nodeDoc = doc(db, 'Nodes', id);
     const snapshot = await getDoc(nodeDoc);
@@ -105,34 +104,41 @@ export const getNodeById = async (id) => {
  * @returns {Promise<Object>} Resultado de la operación
  */
 export const saveNode = async (node) => {
-  const nodeDocRef = doc(db, 'Nodes', node.id || ''); 
-
-  const createdByRef = node.createdBy && node.createdBy.id ? doc(db, 'users', node.createdBy.id) : null;
-  const themeIdRef = node.themeId && node.themeId.id ? doc(db, 'Themes', node.themeId.id) : null;
-
-  try {
-    if (node.id) {
-      await updateDoc(nodeDocRef, {
-        title: node.title,
-        content: node.content,
-        createdAt: node.createdAt,
-        createdBy: createdByRef, 
-        themeId: themeIdRef,  
-      });
-    } else {
-      await setDoc(nodeDocRef, {
-        title: node.title,
-        content: node.content,
-        createdAt: node.createdAt,
-        createdBy: createdByRef, 
-        themeId: themeIdRef,  
-      });
-    }
-    return { success: true };
-  } catch (error) {
-    console.error("Failed to save node:", error);
-    return { success: false, error: error.message }; 
-  }
+    try {
+        let nodeDocRef;
+    
+        // Si node.id está presente, actualizamos el nodo
+        if (node.id) {
+          nodeDocRef = doc(db, 'Nodes', node.id);
+    
+          const createdByRef = node.createdBy && node.createdBy.id ? doc(db, 'users', node.createdBy.id) : null;
+          const themeIdRef = node.themeId && node.themeId.id ? doc(db, 'Themes', node.themeId.id) : null;
+    
+          await updateDoc(nodeDocRef, {
+            title: node.title,
+            content: node.content,
+            createdAt: node.createdAt,
+            createdBy: createdByRef,
+            themeId: themeIdRef,
+          });
+        } else {
+          // Si node.id no está presente, usamos addDoc para crear un nuevo nodo con un ID único
+          const newNodeRef = await addDoc(collection(db, 'Nodes'), {
+            title: node.title,
+            content: node.content,
+            createdAt: node.createdAt,
+            createdBy: node.createdBy ? doc(db, 'users', node.createdBy.id) : null,
+            themeId: node.themeId ? doc(db, 'Themes', node.themeId.id) : null,
+          });
+    
+          nodeDocRef = newNodeRef; // Asignamos el ID generado automáticamente por Firestore
+        }
+    
+        return { success: true };
+      } catch (error) {
+        console.error("Failed to save node:", error);
+        return { success: false, error: error.message };
+      }
 };
 
 /**

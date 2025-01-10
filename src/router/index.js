@@ -5,6 +5,8 @@ import ListThemes from '../views/ListThemes.vue'
 import CreateTheme from '../views/CreateTheme.vue'
 import EditTheme from '../views/EditTheme.vue'
 import ListNodes from '../views/ListNodes.vue'
+import CreateNode from '../views/CreateNode.vue'
+import EditNode from '../views/EditNode.vue'
 
 const routes = [
   {
@@ -41,6 +43,16 @@ const routes = [
     path: '/nodes',
     name: 'Nodes',
     component: ListNodes
+  },
+  {
+    path: '/nodes/create',
+    name: 'CreateNode',
+    component: CreateNode
+  },
+  {
+    path: '/nodes/:id/edit',
+    name: 'EditNode',
+    component: EditNode
   }
 ]
 

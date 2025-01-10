@@ -2,14 +2,14 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>List Nodes</ion-title>
+        <ion-title>Nodes</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
       <ion-card>
         <ion-card-header>
           <div class="header-container">
-            <ion-card-title>Available Nodes</ion-card-title>
+            <ion-card-title>Nodes</ion-card-title>
             <ion-button @click="createNode" fill="solid" class="green-button-fill">Create New Node</ion-button>
           </div>
         </ion-card-header>
@@ -126,6 +126,8 @@ async function deleteNode(nodeId) {
   try {
     await nodeStore.deleteNode(nodeId);
     console.log("Node deleted successfully");
+
+    router.go(0);
   } catch (error) {
     console.error("Error deleting node:", error);
   }
