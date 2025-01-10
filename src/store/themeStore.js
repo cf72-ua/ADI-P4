@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia';
 import * as ThemeRepository from '../firebase/repositories/ThemeRepository.js';
 
+/**
+ * Almacén de temas utilizando Pinia
+ * - Gestiona el estado relacionado con los temas
+ * - Ofrece acciones para interactuar con Firestore a través del repositorio de temas
+ */
 export const useThemeStore = defineStore('theme', {
     state: () => ({
         themes: [], // Lista de temas cargados desde Firestore
@@ -10,7 +15,10 @@ export const useThemeStore = defineStore('theme', {
     }),
 
     actions: {
-        // Cargar todos los temas
+        /**
+         * Carga todos los temas desde Firestore y los almacena en el estado
+         * @returns {Promise<void>} Actualiza el estado con la lista de temas o maneja errores
+         */
         async fetchThemes() {
             this.isLoading = true;
             this.error = null;
@@ -25,7 +33,14 @@ export const useThemeStore = defineStore('theme', {
             }
         },
 
-        // Crear un tema
+        /**
+         * Crea un nuevo tema y lo añade a la lista local
+         * @param {string} title - Título del tema
+         * @param {string} description - Descripción del tema
+         * @param {string} imageUrl - URL de la imagen del tema
+         * @param {string} createdBy - ID del usuario que crea el tema
+         * @returns {Promise<void>} Maneja la creación y actualiza el estado
+         */
         async createTheme(title, description, imageUrl, createdBy) {
             this.isLoading = true;
             this.error = null;
@@ -46,7 +61,11 @@ export const useThemeStore = defineStore('theme', {
             }
         },
 
-        // Eliminar un tema
+        /**
+         * Elimina un tema por su ID tanto en Firestore como en el estado local
+         * @param {string} themeId - ID del tema a eliminar
+         * @returns {Promise<void>} Maneja la eliminación y actualiza el estado
+         */
         async deleteTheme(themeId) {
             this.isLoading = true;
             this.error = null;
@@ -62,7 +81,12 @@ export const useThemeStore = defineStore('theme', {
             }
         },
 
-        // Actualizar un tema
+        /**
+         * Actualiza un tema existente por su ID
+         * @param {string} themeId - ID del tema a actualizar
+         * @param {Object} updatedData - Objeto con los datos actualizados
+         * @returns {Promise<void>} Maneja la actualización y modifica el estado local
+         */
         async updateTheme(themeId, updatedData) {
             this.isLoading = true;
             this.error = null;
@@ -81,12 +105,19 @@ export const useThemeStore = defineStore('theme', {
             }
         },
 
-        // Seleccionar un tema para mostrar detalles o editar
+        /**
+         * Selecciona un tema del estado por su ID para mostrar detalles o editarlo
+         * @param {string} themeId - ID del tema a seleccionar
+         */
         selectTheme(themeId) {
             this.currentTheme = this.themes.find((theme) => theme.id === themeId) || null;
         },
 
-        // Buscar temas localmente
+        /**
+         * Busca temas localmente por coincidencia en el título
+         * @param {string} query - Texto de búsqueda
+         * @returns {Array} Lista de temas que coinciden con el texto
+         */
         searchThemes(query) {
             if (!query) return this.themes;
             return this.themes.filter((theme) =>
@@ -94,14 +125,20 @@ export const useThemeStore = defineStore('theme', {
             );
         },
 
-        // Limpiar el tema actual
+        /**
+         * Limpia el tema actualmente seleccionado
+         */
         clearCurrentTheme() {
             this.currentTheme = null;
         },
     },
 
     getters: {
-        // Ordenar los temas por fecha de creación
+        /**
+         * Devuelve los temas ordenados por fecha de creación en orden descendente
+         * @param {Object} state - Estado del almacén
+         * @returns {Array} Lista de temas ordenados por fecha
+         */
         sortedThemes: (state) => {
             return [...state.themes].sort(
                 (a, b) => new Date(b.createdAt) - new Date(a.createdAt)

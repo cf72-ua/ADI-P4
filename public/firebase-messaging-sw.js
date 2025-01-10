@@ -18,10 +18,14 @@ firebase.initializeApp({
     appId: "1:258860610070:web:d6376ee68f401b7becbb37", // ID único de la aplicación
 });
 
-// Retrieve an instance of Firebase Messaging so that it can handle background
-// messages.
+// Obtiene una isntancia de Firebase Messaging para poder manejar mensajes en segundo plano
 const messaging = firebase.messaging();
 
+/**
+ * Maneja mensajes en segundo plano recibidos a través de Firebase Messaging.
+ * - Si el mensaje incluye una notificación, la muestra como notificación del navegador.
+ * @param {Object} payload - Datos del mensaje en segundo plano
+ */
 messaging.onBackgroundMessage((payload) => {
     console.log(
         '[firebase-messaging-sw.js] Received background message ',
@@ -33,7 +37,7 @@ messaging.onBackgroundMessage((payload) => {
         return;
     }
 
-    // Customize notification here
+    // Aquí se personaliza la notificación
     const notificationTitle = payload.notification.title;
     const notificationOptions = {
         body: payload.notification.body,
