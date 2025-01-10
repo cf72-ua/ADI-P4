@@ -60,44 +60,25 @@ import {
 } from "@ionic/vue";
 import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import * as ThemeRepository from "../firebase/repositories/ThemeRepository.js";
+import { useThemeStore } from "../store/themeStore.js";
 
 const router = useRouter();
 const route = useRoute();
+const themeStore = useThemeStore();
 
 const title = ref("");
 const description = ref("");
 const imageUrl = ref("");
 
-// Función para cargar los datos del tema
-async function fetchTheme() {
-  try {
-    const themeId = route.params.id; // Obtiene el ID del tema desde la URL
-    const themes = await ThemeRepository.getAllThemes();
-    const theme = themes.find((t) => t.id === themeId);
-    if (theme) {
-      title.value = theme.title;
-      description.value = theme.description;
-      imageUrl.value = theme.imageUrl;
-    }
-  } catch (error) {
-    console.error("Error fetching theme:", error);
-  }
-}
-
-// Función para actualizar el tema
+// Actualizar el tema
 async function updateTheme() {
-  try {
-    const themeId = route.params.id;
-    await ThemeRepository.updateTheme(themeId, {
-      title: title.value,
-      description: description.value,
-      imageUrl: imageUrl.value,
-    });
-    router.push("/listThemes"); // Redirige a la lista de temas
-  } catch (error) {
-    console.error("Error updating theme:", error);
-  }
+  const themeId = route.params.id;
+  await themeStore.updateTheme(themeId, {
+    title: title.value,
+    description: description.value,
+    imageUrl: imageUrl.value,
+  });
+  router.push("/listThemes"); // Redirige a la lista de temas
 }
 
 // Función para volver atrás
@@ -105,9 +86,17 @@ function goBack() {
   router.back();
 }
 
-onMounted(() => {
-  fetchTheme();
+onMounted(async () => {
+  const themeId = route.params.id;
+  await themeStore.fetchThemes(); // Asegúrate de que los temas están cargados
+  const theme = themeStore.themes.find((t) => t.id === themeId);
+  if (theme) {
+    title.value = theme.title;
+    description.value = theme.description;
+    imageUrl.value = theme.imageUrl;
+  }
 });
+
 </script>
 
 <style scoped>
