@@ -107,15 +107,12 @@ export const saveNode = async (node) => {
     try {
         let nodeDocRef;
     
-        // Si node.id está presente, actualizamos el nodo
         if (node.id) {
           nodeDocRef = doc(db, 'Nodes', node.id);
     
-          // Obtener el nodo actual para mantener los valores originales si no se proporcionan
           const currentNodeSnapshot = await getDoc(nodeDocRef);
           const currentNode = currentNodeSnapshot.data();
 
-          // Verificamos si 'createdBy' y 'themeId' están definidos, si no, mantenemos los originales
           const createdByRef = node.createdBy && node.createdBy.id ? doc(db, 'users', node.createdBy.id) : (currentNode.createdBy ? doc(db, 'users', currentNode.createdBy.id) : null);
           const themeIdRef = node.themeId && node.themeId.id ? doc(db, 'Themes', node.themeId.id) : (currentNode.themeId ? doc(db, 'Themes', currentNode.themeId.id) : null);
     
@@ -126,7 +123,6 @@ export const saveNode = async (node) => {
             themeId: themeIdRef,
           });
         } else {
-          // Si node.id no está presente, usamos addDoc para crear un nuevo nodo con un ID único
           const newNodeRef = await addDoc(collection(db, 'Nodes'), {
             title: node.title,
             content: node.content,
@@ -135,7 +131,7 @@ export const saveNode = async (node) => {
             themeId: node.themeId ? doc(db, 'Themes', node.themeId.id) : null,
           });
     
-          nodeDocRef = newNodeRef; // Asignamos el ID generado automáticamente por Firestore
+          nodeDocRef = newNodeRef;
         }
     
         return { success: true };

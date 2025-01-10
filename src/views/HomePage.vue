@@ -1,12 +1,9 @@
 <template>
   <ion-page>
-    <!-- Contenido principal -->
     <ion-content>
-      <!-- Logo de la compañía -->
       <div class="logo-container">
         <img src="../assets/nodality.png" alt="Logo de la compañía" class="company-logo" />
       </div>
-      <!-- Sección Hero -->
       <section class="hero">
         <h1 class="hero-title animate__animated animate__fadeIn">Welcome to our platform</h1>
         <p class="hero-description animate__animated animate__fadeIn animate__delay-1s">
@@ -17,16 +14,13 @@
         </ion-button>
       </section>
 
-      <!-- Sección Features -->
       <section class="features">
         <h2 class="animate__animated animate__fadeIn animate__delay-1s">Main Features</h2>
         <div class="features-grid">
-          <!-- Enlace a Theme Management -->
           <a href="/listThemes" class="feature-card animate__animated animate__fadeIn animate__delay-2s">
             <h5>Theme Management</h5>
             <p>Easily add and manage themes.</p>
           </a>
-          <!-- Enlace a Node Visualization -->
           <a href="/nodes" class="feature-card animate__animated animate__fadeIn animate__delay-3s">
             <h5>Node Visualization</h5>
             <p>Organize and manage your nodes with ease.</p>
@@ -60,12 +54,13 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const goToThemes = () => {
-  router.push('/listThemes'); // Navegar a la página de temas
+  router.push('/listThemes');
 };
+
 </script>
 
 <style scoped>
-/* Estilo del contenido */
+
 .logo-container {
   margin-top: 40px;
 }
@@ -81,7 +76,6 @@ const goToThemes = () => {
   padding: 20px;
 }
 
-/* Estilos personalizados */
 .hero {
   text-align: center;
   margin-top: 30px;
@@ -122,7 +116,7 @@ const goToThemes = () => {
   width: 250px;
   border-radius: 10px;
   text-align: center;
-  cursor: pointer; /* Hacer que los cards se vean como enlaces */
+  cursor: pointer;
 }
 
 a {
@@ -132,5 +126,5 @@ a {
 </style>
 
 <style>
-@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
 </style>

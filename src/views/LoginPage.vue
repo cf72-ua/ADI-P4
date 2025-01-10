@@ -64,18 +64,17 @@ import {
 } from "@ionic/vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "@/store/authStore"; // Importa la store de autenticación
+import { useAuthStore } from "@/store/authStore";
 
 const router = useRouter();
-const authStore = useAuthStore(); // Instancia de la store de Pinia
+const authStore = useAuthStore();
 
 const email = ref("");
 const password = ref("");
 
-// Maneja el inicio de sesión usando la store
 async function handleLogin() {
   try {
-    await authStore.login(email.value, password.value); // Acción de la store
+    await authStore.login(email.value, password.value); 
     console.log("Logged user:", authStore.user);
 
     // Redirección al home después del inicio de sesión
@@ -86,14 +85,13 @@ async function handleLogin() {
   }
 }
 
-// Maneja el restablecimiento de contraseña
 async function handlePasswordReset() {
   try {
     if (!email.value) {
       showError("Please, write your email.");
       return;
     }
-    await authStore.resetPassword(email.value); // Usa la acción de la store
+    await authStore.resetPassword(email.value);
     showSuccess("Reset password sent to email.");
   } catch (error) {
     console.error("Failed to reset password:", error);
@@ -101,7 +99,6 @@ async function handlePasswordReset() {
   }
 }
 
-// Muestra un mensaje de error
 async function showError(message) {
   const alert = await alertController.create({
     header: "Error",
@@ -111,7 +108,6 @@ async function showError(message) {
   await alert.present();
 }
 
-// Muestra un mensaje de éxito
 async function showSuccess(message) {
   const toast = await toastController.create({
     message,
@@ -120,10 +116,13 @@ async function showSuccess(message) {
   });
   await toast.present();
 }
+
 </script>
 
 <style scoped>
+
 .ion-text-center {
   margin-top: 16px;
 }
+
 </style>

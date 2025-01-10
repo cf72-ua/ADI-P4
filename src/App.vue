@@ -1,6 +1,5 @@
 <template>
   <ion-app>
-    <!-- Menú lateral -->
     <ion-menu content-id="main-content" v-show="isLoggedIn">
       <ion-header>
         <ion-toolbar>
@@ -45,7 +44,6 @@
       </ion-content>
     </ion-menu>
 
-    <!-- Encabezado global -->
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-buttons slot="start">
@@ -63,7 +61,6 @@
       </ion-toolbar>
     </ion-header>
 
-    <!-- Contenedor principal para las vistas -->
     <ion-router-outlet id="main-content"></ion-router-outlet>
   </ion-app>
 </template>
@@ -86,10 +83,9 @@ import {
   IonLabel,
 } from '@ionic/vue';
 import { computed } from 'vue';
-import { useAuthStore } from '@/store/authStore'; // Store de autenticación
-import { useRouter } from 'vue-router'; // Router para navegación
+import { useAuthStore } from '@/store/authStore';
+import { useRouter } from 'vue-router';
 
-// Íconos de Ionicons
 import { addIcons } from 'ionicons';
 import {
   homeOutline,
@@ -108,10 +104,8 @@ addIcons({
 const authStore = useAuthStore();
 const router = useRouter();
 
-// Estado de autenticación del usuario
 const isLoggedIn = computed(() => !!authStore.user);
 
-// Maneja el logout
 async function handleLogout() {
   try {
     await authStore.logout();
@@ -121,24 +115,21 @@ async function handleLogout() {
   }
 }
 
-// Navegar a login
 function navigateToLogin() {
   router.push('/login');
 }
 
-// Navegar a otras rutas
 function navigateTo(route) {
   router.push(route);
 }
 
-// Verifica si la ruta actual coincide con el item del menú
 function isActive(route) {
   return router.currentRoute.value.path === route;
 }
 </script>
 
 <style scoped>
-/* Estilo del menú lateral */
+
 .minimal-menu-list {
   --background: #f4f4f4;
 }
@@ -167,7 +158,6 @@ function isActive(route) {
   flex: 1;
 }
 
-/* Elemento activo */
 .active-item {
   --background: #d1f7c4;
   color: #2e7d32;

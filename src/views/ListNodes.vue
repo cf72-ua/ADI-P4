@@ -44,7 +44,6 @@
         </ion-card-content>
       </ion-card>
 
-      <!-- Popup de Detalles -->
       <div v-if="selectedNode" class="popup-overlay" @click.self="closeDetails">
         <div class="popup-container">
           <h3>{{ selectedNode.title || "No title" }}</h3>
@@ -141,9 +140,11 @@ function searchNodes() {
 onMounted(() => {
   fetchNodes();
 });
+
 </script>
 
 <style scoped>
+
 .header-container {
   display: flex;
   justify-content: space-between;
