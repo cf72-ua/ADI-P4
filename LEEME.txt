@@ -1,0 +1,14 @@
+Trabajo realizado por Carolina Fernández y Pablo Lecocq Hernandis
+
+- Todo el código ha sido documentado (tanto parte obligatoria como opcional).
+
+PARTE OPCIONAL
+
+- CRUD de más de un recurso
+
+    Tenemos CRUD de dos recursos: Node y Theme. Una vez hacemos el Login, nos encontramos en
+    la página principal, la cual cuenta con una cabecera donde hay un menú. Con este menú podremos
+    movernos entre páginas. Por lo que desde ahí podremos ir a Nodes y a Themes. Ambas páginas tienen
+    el listado de sus recursos, y se pueden crear nuevos, modificar y eliminar. 
+
+- Implementar notificaciones push
