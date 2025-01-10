@@ -61,6 +61,8 @@ import {
 import { ref, onMounted} from "vue";
 import { useRouter } from "vue-router";
 import { useThemeStore } from "../store/themeStore.js";
+import { auth } from "../firebase/config/firebaseConfig.js";
+
 
 const router = useRouter();
 const themeStore = useThemeStore();
@@ -78,7 +80,12 @@ onMounted(() => {
 
 // Crear un nuevo tema
 async function createTheme() {
-  const createdBy = "user123"; // Cambiar por la lógica de usuario actual
+  const currentUser = auth.currentUser;
+  if (!currentUser) {
+    console.error("No hay un usuario autenticado.");
+    return;
+  }
+  const createdBy = currentUser.email || "Usuario desconocido";
   await themeStore.createTheme(title.value, description.value, imageUrl.value, createdBy);
   router.push("/listThemes"); // Redirige a la lista de temas
 }
