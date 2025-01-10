@@ -27,6 +27,12 @@ messaging.onBackgroundMessage((payload) => {
         '[firebase-messaging-sw.js] Received background message ',
         payload
     );
+
+    if (payload. notification) {
+        // En caso de que Firebase ya esté manejando la notificación, no hacemos nada.
+        return;
+    }
+
     // Customize notification here
     const notificationTitle = payload.notification.title;
     const notificationOptions = {
