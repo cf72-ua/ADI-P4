@@ -2,6 +2,10 @@ Trabajo realizado por Carolina Fernández y Pablo Lecocq Hernandis
 
 - Todo el código ha sido documentado (tanto parte obligatoria como opcional).
 
+Usuario de ejemplo (no hacemos uso de administrador):
+    user: caro@ua.es
+    password: 123456
+
 PARTE OPCIONAL
 
 - CRUD de más de un recurso
