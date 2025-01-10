@@ -88,7 +88,7 @@ function goBack() {
 
 onMounted(async () => {
   const themeId = route.params.id;
-  await themeStore.fetchThemes(); // Asegúrate de que los temas están cargados
+  await themeStore.fetchThemes(); 
   const theme = themeStore.themes.find((t) => t.id === themeId);
   if (theme) {
     title.value = theme.title;
