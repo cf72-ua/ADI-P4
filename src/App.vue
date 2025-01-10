@@ -177,4 +177,5 @@ function isActive(route) {
 .active-item ion-icon {
   color: #2e7d32;
 }
+
 </style>
