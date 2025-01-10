@@ -2,6 +2,7 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import "firebase/compat/auth";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 // Configuración de Firebase
 // Este objeto contiene las credenciales necesarias para conectar la aplicación con el proyecto de firebase
@@ -22,3 +23,24 @@ const app = firebase.initializeApp(firebaseConfig);
 // Exportamos las instancias de Firestore y Auth para usarlas en otros módulos
 export const db = firebase.firestore(); // Base de datos en tiempo real de Firebase
 export const auth = firebase.auth(); // Servicio de autenticación de Firebase
+
+// Get registration token. Initially this makes a network call, once retrieved
+// subsequent calls to getToken will return from cache.
+const messaging = getMessaging();
+onMessage(messaging, (payload) => {
+    console.log('Message received. ', payload);
+    // ...
+});
+getToken(messaging, { vapidKey: 'BM-S_NoHbqm6kvhKs6yVOhczjYYhfFfkartZg83Te8YNB4EoVZdstDkKJn8nYal3BugltRE5PY2reVY-Dlh71uA' }).then((currentToken) => {
+    if (currentToken) {
+        // Send the token to your server and update the UI if necessary
+        console.log("Token is: ", currentToken);
+    } else {
+        // Show permission request UI
+        console.log('No registration token available. Request permission to generate one.');
+        // ...
+    }
+}).catch((err) => {
+    console.log('An error occurred while retrieving token. ', err);
+    // ...
+});
