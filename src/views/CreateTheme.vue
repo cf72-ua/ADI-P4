@@ -60,9 +60,10 @@ import {
 } from "@ionic/vue";
 import { ref, onMounted} from "vue";
 import { useRouter } from "vue-router";
-import * as ThemeRepository from "../firebase/repositories/ThemeRepository.js";
+import { useThemeStore } from "../store/themeStore.js";
 
 const router = useRouter();
+const themeStore = useThemeStore();
 
 const title = ref("");
 const description = ref("");
@@ -75,15 +76,11 @@ onMounted(() => {
   imageUrl.value = "";
 });
 
-// Función para crear un tema
+// Crear un nuevo tema
 async function createTheme() {
-  try {
-    const createdBy = "user123"; // Reemplaza con la lógica de usuario actual
-    await ThemeRepository.createTheme(title.value, description.value, imageUrl.value, createdBy);
-    router.push("/listThemes"); // Redirige a la lista de temas
-  } catch (error) {
-    console.error("Error creating theme:", error);
-  }
+  const createdBy = "user123"; // Cambiar por la lógica de usuario actual
+  await themeStore.createTheme(title.value, description.value, imageUrl.value, createdBy);
+  router.push("/listThemes"); // Redirige a la lista de temas
 }
 
 // Función para volver atrás

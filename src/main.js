@@ -42,9 +42,11 @@ const app = createApp(App)
   .use(router)
   .use(pinia);
 
-const authStore = useAuthStore();
-authStore.checkAuthState();
 
 router.isReady().then(() => {
   app.mount('#app');
+
+  const authStore = useAuthStore();
+
+  authStore.checkAuthState();
 });

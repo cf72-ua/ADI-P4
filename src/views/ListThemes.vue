@@ -37,23 +37,32 @@
               </ion-buttons>
             </ion-item>
           </ion-list>
-          <ion-text v-if="!isLoading && filteredThemes.length === 0" class="ion-text-center">
+          <ion-text
+              v-if="!themeStore.isLoading && filteredThemes.length === 0"
+              class="ion-text-center"
+          >
             No topics available.
           </ion-text>
-          <ion-spinner v-if="isLoading" class="ion-margin-top"></ion-spinner>
+          <ion-spinner v-if="themeStore.isLoading" class="ion-margin-top"></ion-spinner>
         </ion-card-content>
       </ion-card>
 
       <!-- Popup de Detalles -->
-      <div v-if="selectedTheme" class="popup-overlay" @click.self="closeDetails">
+      <div v-if="themeStore.currentTheme" class="popup-overlay" @click.self="closeDetails">
         <div class="popup-container">
-          <h3>{{ selectedTheme.title || "No title" }}</h3>
-          <p><strong>Description:</strong> {{ selectedTheme.description || "No description" }}</p>
-          <p><strong>Created By:</strong> {{ selectedTheme.createdBy || "Unknown" }}</p>
-          <p><strong>Image URL:</strong> <a :href="selectedTheme.imageUrl" target="_blank">{{ selectedTheme.imageUrl || "No image" }}</a></p>
+          <h3>{{ themeStore.currentTheme.title || "No title" }}</h3>
+          <p><strong>Description:</strong> {{ themeStore.currentTheme.description || "No description" }}</p>
+          <p><strong>Created By:</strong> {{ themeStore.currentTheme.createdBy || "Unknown" }}</p>
+          <p>
+            <strong>Image URL:</strong>
+            <a :href="themeStore.currentTheme.imageUrl" target="_blank">
+              {{ themeStore.currentTheme.imageUrl || "No image" }}
+            </a>
+          </p>
           <ion-button @click="closeDetails">Close</ion-button>
         </div>
       </div>
+
     </ion-content>
   </ion-page>
 </template>
@@ -80,40 +89,28 @@ import {
 } from "@ionic/vue";
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import * as ThemeRepository from "../firebase/repositories/ThemeRepository.js";
+import { useThemeStore }  from "../store/themeStore.js";
 
 const router = useRouter();
+const themeStore = useThemeStore();
 
-const themes = ref([]); // Almacena todos los temas
+
+// Filtro para los temas
+const searchQuery = ref(""); // Entrada del usuario para buscar
 const filteredThemes = computed(() =>
-    themes.value.filter((theme) =>
+    themeStore.themes.filter((theme) =>
         theme.title.toLowerCase().includes(searchQuery.value.toLowerCase())
     )
-); // Temas filtrados por búsqueda
-const searchQuery = ref(""); // Entrada del usuario para buscar
-const isLoading = ref(false); // Estado de carga
-const selectedTheme = ref(null); // Almacena el tema seleccionado para mostrar detalles
-
-// Cargar todos los temas
-async function fetchThemes() {
-  isLoading.value = true;
-  try {
-    themes.value = await ThemeRepository.getAllThemes(); // Llama a getAllThemes
-  } catch (error) {
-    console.error("Error fetching themes:", error);
-  } finally {
-    isLoading.value = false;
-  }
-}
+);
 
 // Mostrar los detalles de un tema
 function showDetails(theme) {
-  selectedTheme.value = theme; // Almacena el tema seleccionado
+  themeStore.selectTheme(theme.id);
 }
 
 // Cerrar los detalles
 function closeDetails() {
-  selectedTheme.value = null; // Limpia el tema seleccionado
+  themeStore.clearCurrentTheme(); // Limpia el tema seleccionado
 }
 
 // Crear un tema
@@ -128,13 +125,7 @@ async function updateTheme(theme) {
 
 // Eliminar un tema
 async function deleteTheme(themeId) {
-  try {
-    await ThemeRepository.deleteTheme(themeId); // Llama al repositorio para eliminar
-    themes.value = themes.value.filter((theme) => theme.id !== themeId); // Elimina localmente
-    console.log("Theme deleted successfully");
-  } catch (error) {
-    console.error("Error deleting theme:", error);
-  }
+  await themeStore.deleteTheme(themeId);
 }
 
 // Buscar temas (en este caso, simplemente filtra localmente)
@@ -144,7 +135,7 @@ function searchThemes() {
 
 // Vuelve a cargar los temas al entrar en esta página
 onMounted(() => {
-  fetchThemes();
+  themeStore.fetchThemes();
 });
 </script>
 
