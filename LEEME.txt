@@ -16,3 +16,5 @@ PARTE OPCIONAL
     el listado de sus recursos, y se pueden crear nuevos, modificar y eliminar. 
 
 - Implementar notificaciones push
+
+    La implementación de las notificaciones push se explica en el video entregado junto con el proyecto.
